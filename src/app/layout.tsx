@@ -1,8 +1,9 @@
 import type { Metadata } from "next";
 import localFont from 'next/font/local'
 import { ThemeProvider } from "@/components/theme-provider";
-import "./globals.css";
 import Header from "@/components/ui/header";
+import { Toaster } from "@/components/ui/toaster";
+import "./globals.css";
 
 const roboto = localFont({
   src: [
@@ -51,6 +52,7 @@ export default function RootLayout({
           <Header />
           {children}
         </ThemeProvider>
+        <Toaster/>
         </body>
     </html>
   );

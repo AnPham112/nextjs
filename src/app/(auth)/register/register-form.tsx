@@ -57,7 +57,7 @@ function RegisterForm() {
             <FormItem>
               <FormLabel>Tên</FormLabel>
               <FormControl>
-                <Input placeholder="name" {...field} />
+                <Input placeholder="tên" {...field} />
               </FormControl>
               <FormMessage />
             </FormItem>
@@ -83,7 +83,7 @@ function RegisterForm() {
             <FormItem>
               <FormLabel>Mật khẩu</FormLabel>
               <FormControl>
-                <Input placeholder="password" type="password" {...field} />
+                <Input placeholder="mật khẩu" type="password" {...field} />
               </FormControl>
               <FormMessage />
             </FormItem>
@@ -96,14 +96,14 @@ function RegisterForm() {
             <FormItem>
               <FormLabel>Nhập lại mật khẩu</FormLabel>
               <FormControl>
-                <Input placeholder="Confirm password" type="password" {...field} />
+                <Input placeholder="nhập lại mật khẩu" type="password" {...field} />
               </FormControl>
               <FormMessage />
             </FormItem>
           )}
         />
         <div className="flex justify-end">
-          <Button className="mt-8 w-full md:w-[unset]" type="submit">Submit</Button>
+          <Button className="mt-8 w-full md:w-[unset]" type="submit">Đăng ký</Button>
         </div>
       </form>
     </Form>
