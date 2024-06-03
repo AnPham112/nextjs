@@ -4,6 +4,8 @@ import { ThemeProvider } from "@/components/theme-provider";
 import Header from "@/components/ui/header";
 import { Toaster } from "@/components/ui/toaster";
 import "./globals.css";
+import AppProvider from "./AppProvider";
+import { cookies } from "next/headers";
 
 const roboto = localFont({
   src: [
@@ -40,6 +42,9 @@ export default function RootLayout({
 }: Readonly<{
   children: React.ReactNode;
 }>) {
+  const cookieStorage = cookies()
+  const sessionToken = cookieStorage.get('sessionToken')
+
   return (
     <html lang="en" suppressHydrationWarning>
       <body className={roboto.className}>
@@ -50,7 +55,10 @@ export default function RootLayout({
           disableTransitionOnChange
         >
           <Header />
-          {children}
+          <AppProvider initialSessionToken={sessionToken?.value}>
+            {children}
+
+          </AppProvider>
         </ThemeProvider>
         <Toaster/>
         </body>

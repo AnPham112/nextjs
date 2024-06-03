@@ -36,7 +36,6 @@ function RegisterForm() {
       body:  JSON.stringify(values)
     }).then((res) => res.json())
 
-    console.log(result)
   }
 
   const handleFormError = (err: FieldErrors<RegisterBodyType>) => {

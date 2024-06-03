@@ -1,5 +1,6 @@
 "use client"
  
+import { useAppContext } from "@/app/AppProvider"
 import { Button } from "@/components/ui/button"
 import {
   Form,
@@ -18,6 +19,7 @@ import { FieldErrors, useForm } from "react-hook-form"
  
 function LoginForm() {
   const { toast } = useToast()
+  const {setSessionToken} = useAppContext()
 
    const form = useForm<LoginBodyType>({
     resolver: zodResolver(LoginBody),
@@ -56,6 +58,8 @@ function LoginForm() {
           'Content-Type': 'application/json'
         }
       }).then(async (res) => {
+
+        
         const payload = await res.json()
         const data = {
           status: res.status,
@@ -66,8 +70,7 @@ function LoginForm() {
         }
         return data;
       })
-
-      console.log(resultFromNextServer)
+      setSessionToken(resultFromNextServer.payload.data.token)
     } catch (error: any) {
       const errors = error.payload.errors as {
         field: 'email' | 'password',
