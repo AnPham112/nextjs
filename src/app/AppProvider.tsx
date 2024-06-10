@@ -1,25 +1,48 @@
-'use client';
+"use client";
 
-import { ReactNode, createContext, useContext, useState } from "react";
+import { clientSessionToken } from "@/lib/http";
+import { useState } from "react";
 
-const AppContext = createContext({
-  sessionToken: '',
-  setSessionToken: (sessionToken: string) => {}
-})
+// import { ReactNode, createContext, useContext, useState } from "react";
 
-export const useAppContext = () => {
-  const context = useContext(AppContext);
-  if(!context) {
-    throw new Error('useAppContext must be used within an AppProvider')
-  }
-  return context
-}
+// const AppContext = createContext({
+//   sessionToken: '',
+//   setSessionToken: (sessionToken: string) => {}
+// })
 
-export default function AppProvider({children, initialSessionToken = ''}: {children: ReactNode, initialSessionToken?: string}) {
-  const [sessionToken, setSessionToken] = useState(initialSessionToken);
-  return (
-    <AppContext.Provider value={{sessionToken, setSessionToken}}>
-      {children}
-    </AppContext.Provider>
-  )
+// export const useAppContext = () => {
+//   const context = useContext(AppContext);
+//   if(!context) {
+//     throw new Error('useAppContext must be used within an AppProvider')
+//   }
+//   return context
+// }
+
+// export default function AppProvider({children, initialSessionToken = ''}: {children: ReactNode, initialSessionToken?: string}) {
+//   const [sessionToken, setSessionToken] = useState(initialSessionToken);
+//   return (
+//     <AppContext.Provider value={{sessionToken, setSessionToken}}>
+//       {children}
+//     </AppContext.Provider>
+//   )
+// }
+
+export default function AppProvider({
+  children,
+  initialSessionToken = "",
+}: {
+  children: React.ReactNode;
+  initialSessionToken?: string;
+}) {
+  // useLayoutEffect(() => {
+  //   clientSessionToken.value = initialSessionToken
+  // }, [initialSessionToken])
+
+  useState(() => {
+    if(typeof window !== "undefined") {
+      clientSessionToken.value = initialSessionToken
+    }
+  })
+
+  return <>{children}</>;
 }

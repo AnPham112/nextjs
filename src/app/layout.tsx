@@ -57,7 +57,6 @@ export default function RootLayout({
           <Header />
           <AppProvider initialSessionToken={sessionToken?.value}>
             {children}
-
           </AppProvider>
         </ThemeProvider>
         <Toaster/>
