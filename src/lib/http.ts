@@ -1,5 +1,6 @@
 import envConfig from "@/config";
 import { LoginResType } from "@/schema-validations/auth.schema";
+import { nomalizePath } from "./utils";
 
 type CustomOptions = Omit<RequestInit, "method"> & {
   baseUrl?: string;
@@ -111,15 +112,17 @@ const request = async <Response>(
     }
   }
 
-  if (["/auth/login", "/auth/register"].includes(url)) {
-    console.log(
-      "(payload as LoginResType).data.token",
-      (payload as LoginResType).data.token
-    );
-    clientSessionToken.value = (payload as LoginResType).data.token;
-  } else if ("/auth/logout".includes(url)) {
-    clientSessionToken.value = "";
+  // Đảm bảo logic dưới đây chỉ chạy ở phía client
+  if (typeof window !== "undefined") {
+    if (
+      ["auth/login", "auth/register"].some((item) => item === nomalizePath(url))
+    ) {
+      clientSessionToken.value = (payload as LoginResType).data.token;
+    } else if ("auth/logout" === nomalizePath(url)) {
+      clientSessionToken.value = "";
+    }
   }
+
   return data;
 };
 
