@@ -5,11 +5,39 @@ type CustomOptions = Omit<RequestInit, "method"> & {
   baseUrl?: string;
 };
 
-class HttpError extends Error {
+const ENTITY_ERROR_STATUS = 422;
+
+type EntityErrorPayload = {
+  message: string;
+  errors: {
+    field: string;
+    message: string;
+  }[];
+};
+
+export class HttpError extends Error {
   status: number;
-  payload: any;
+  payload: {
+    message: string;
+    [key: string]: any;
+  };
   constructor({ status, payload }: { status: number; payload: any }) {
     super("Http Error");
+    this.status = status;
+    this.payload = payload;
+  }
+}
+export class EntityError extends HttpError {
+  status: 422;
+  payload: EntityErrorPayload;
+  constructor({
+    status,
+    payload,
+  }: {
+    status: 422;
+    payload: EntityErrorPayload;
+  }) {
+    super({ status, payload });
     this.status = status;
     this.payload = payload;
   }
@@ -71,7 +99,16 @@ const request = async <Response>(
     payload,
   };
   if (!res.ok) {
-    throw new HttpError(data);
+    if (res.status === ENTITY_ERROR_STATUS) {
+      throw new EntityError(
+        data as {
+          status: 422;
+          payload: EntityErrorPayload;
+        }
+      );
+    } else {
+      throw new HttpError(data);
+    }
   }
 
   if (["/auth/login", "/auth/register"].includes(url)) {

@@ -1,7 +1,8 @@
-'use client'
+"use client";
 
-import { useEffect, useState } from "react"
+import { useEffect, useState } from "react";
 import accountApiRequest from "@/apiRequests/account";
+import { handleErrorApi } from "@/lib/utils";
 
 interface Profile {
   id: number;
@@ -13,19 +14,23 @@ export default function ProfileClient() {
   const [profile, setProfile] = useState<Profile>();
 
   useEffect(() => {
-    const fetchProfile = async() => {
-      const result = await accountApiRequest.meClient()
-      setProfile(result.payload.data)
-    }
-    fetchProfile()
-  }, [])
-
-  
+    const fetchProfile = async () => {
+      try {
+        const result = await accountApiRequest.meClient();
+        setProfile(result.payload.data);
+      } catch (error) {
+        handleErrorApi({
+          error,
+        });
+      }
+    };
+    fetchProfile();
+  }, []);
 
   return (
     <>
       <h1>Profile client page</h1>
       <p>hello {profile?.email}</p>
     </>
-  )
+  );
 }
